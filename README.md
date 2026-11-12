@@ -6,6 +6,7 @@ MIT-licensed.
 
 | Skill | Purpose | Download |
 | --- | --- | --- |
+| [`astro-ui-patterns`](skills/astro-ui-patterns/) | Implement 17 accessible Astro interaction patterns (navigation drawer, dialog, tabs, accordion, search and filters, carousel, cards, theme toggle, self-hosted map and more) as zero-dependency components, or adapt their behaviour contracts to a project's framework. Snapshot of 2026-11-12. | [v1.0.0](https://github.com/gdcrosbie/agent-skills/releases/tag/astro-ui-patterns-v1.0.0) |
 | [`experience-article-interview`](skills/experience-article-interview/) | Interview an author about their own experience, then challenge the argument, structure, draft in their voice, fact-check and edit an article. Builds a reusable author profile on first use; optional short social post. | [v1.0.0](https://github.com/gdcrosbie/agent-skills/releases/tag/experience-article-interview-v1.0.0) |
 
 ## Install

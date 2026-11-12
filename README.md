@@ -4,14 +4,15 @@ Skills for AI agents that read `SKILL.md` folders (Claude, Claude Code, Codex, G
 and similar). Each skill is self-contained, needs no particular service or account, and is
 MIT-licensed.
 
-| Skill | Purpose |
-| --- | --- |
-| [`experience-article-interview`](skills/experience-article-interview/) | Interview an author about their own experience, then challenge the argument, structure, draft in their voice, fact-check and edit an article. Builds a reusable author profile on first use; optional short social post. |
+| Skill | Purpose | Download |
+| --- | --- | --- |
+| [`experience-article-interview`](skills/experience-article-interview/) | Interview an author about their own experience, then challenge the argument, structure, draft in their voice, fact-check and edit an article. Builds a reusable author profile on first use; optional short social post. | [v1.0.0](https://github.com/gdcrosbie/agent-skills/releases/tag/experience-article-interview-v1.0.0) |
 
 ## Install
 
-Download a bundle from the repository's releases when one is published, or build one
-yourself (below).
+Download the `.skill` or `.zip` from the skill's release (the Download column above; all
+versions are on the [releases page](https://github.com/gdcrosbie/agent-skills/releases)),
+or build one yourself (below).
 
 - **Claude apps:** upload the `.skill` or `.zip` file in the app's skills settings. Anthropic's
   help pages give the current menu path.

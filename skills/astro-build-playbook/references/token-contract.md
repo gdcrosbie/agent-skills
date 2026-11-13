@@ -162,7 +162,7 @@ Components that consume `--cq-*` tokens carry their own container query context 
 
 ## 3. "Bring Your Own Tokens" (BYOT) & The Semantic Alias Bridge
 
-When a developer brings an existing token set (from an established brand system, Automatic.css / SchemaWP kit, Utopia, or Open Props), **do not rewrite their tokens or rename their variables**.
+When a developer brings an existing token set (from an established brand system, Automatic.css / SchemaWP kit, or Open Props), **do not rewrite their tokens or rename their variables**.
 
 Instead, place their file at `src/styles/tokens.css` and append a **Semantic Alias Bridge** at the bottom:
 
@@ -226,7 +226,7 @@ Instead, place their file at `src/styles/tokens.css` and append a **Semantic Ali
 }
 ```
 
-### External Token Systems & Scale Nuances (ACSS, GenCSS, Utopia, Open Props)
+### External Token Systems & Scale Nuances (ACSS, GenCSS, Open Props)
 
 When importing tokens from external design systems into the baseline's token contract, understand how their primitives differ from the native schema:
 
@@ -303,7 +303,7 @@ Feed this prompt to any agent with Figma/Paper/Design access:
 Before authoring components, establish `src/styles/tokens.css` via the **3-Path Token Ingestion Gate**:
 
 1. **Path 1: Bring Your Own `tokens.css` (BYOT)**:
-   - If the developer provides an existing `tokens.css` (e.g. brand tokens, Automatic.css / SchemaWP kit, Utopia):
+   - If the developer provides an existing `tokens.css` (e.g. brand tokens, Automatic.css / SchemaWP kit):
      1. Place the file at `src/styles/tokens.css`.
      2. Append the **Semantic Alias Bridge** at the bottom of `tokens.css` mapping the developer's primitives (e.g. `--primary`, `--base-dark`) to the semantic schema (`--color-primary`, `--color-text`, `--color-bg`). See `token-contract.md`.
      3. Run `npm run test:tokens` and `npm run test:contrast`. If both pass, proceed straight to Phase 2!

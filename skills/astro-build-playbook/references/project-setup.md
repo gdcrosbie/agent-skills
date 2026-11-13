@@ -12,7 +12,7 @@ Never start from an empty folder. Select the base matching the project requireme
 | **Official Astro Starters** | `npm create astro@latest -- --template <name>` or `@astrojs/starlight` | Specialised or un-opinionated foundations (e.g. Starlight for pure documentation, or other templates when an alternative architecture is explicitly requested). | Path 1 (BYOT) or Path 2 (Design Ingestion) |
 
 > [!NOTE]
-> **Default:** Astro minimal plus this skill's baseline. External token systems (Automatic.css, GenCSS, Utopia, Open Props) are supported via the **Semantic Alias Bridge** (Path 1: BYOT). Consult [`token-contract.md`](token-contract.md) before building.
+> **Default:** Astro minimal plus this skill's baseline. External token systems (Automatic.css, GenCSS, Open Props) are supported via the **Semantic Alias Bridge** (Path 1: BYOT). Consult [`token-contract.md`](token-contract.md) before building.
 
 0. **Content and runtime decision**: Surface **no CMS**, **Sveltia** and **EmDash** as the standard Astro options when starting a build; preserve any choice already made. Use the matrix in [`references/git-cms.md`](../references/git-cms.md). No CMS and Sveltia normally use static output. EmDash uses server output with an adapter and database/media storage; read [`references/emdash.md`](../references/emdash.md) before installing the baseline or configuring hosting. This choice is independent of the approved design system. Other CMSs remain available when explicitly selected.
 

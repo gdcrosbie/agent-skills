@@ -81,49 +81,28 @@ Before handing off, run the verification pipeline appropriate to the selected ru
 
 **Interaction verification:** verify mobile navigation and any light/dark switching through their full state transitions in a rendered browser; synthetic clicks alone don't establish behaviour. Checklist in `verification.md`.
 
-4. **Accessibility Audit** → After `test:a11y` passes, run the accessibility half of [the final audit](#final-design-and-accessibility-audit) against `astro preview` or the deployed URL. Axe on prerendered output is a preflight; the audit covers rendered contrast, focus, keyboard and interaction states it cannot.
+4. **Accessibility Audit** → After `test:a11y` passes, run the [`accessibility-audit`](../../accessibility-audit/SKILL.md) skill (if installed; otherwise the minimum checks in [the final audit](#final-design-and-accessibility-audit)) against `astro preview` or the deployed URL. Axe on prerendered output is a preflight; the audit covers rendered contrast, focus, keyboard and interaction states it cannot.
 5. Lighthouse Headless Benchmark → 95+ Performance, 0ms TBT, 0 CLS.
 6. SEO & Social Metadata Audit → Verify the sitemap exists in static output or resolves on the live server (indexable sites only), canonical URL matches production domain, and 1200x630 social card (`og-default.jpg`) is present.
 
 ### Final design and accessibility audit
 
 Run on `astro preview` or the deployed URL under production headers, not on source files or the
-dev server. Inputs: the URL, the routes and states to cover, the design snapshot (`design/figma/`,
-`design/paper/` or the HTML export), the token source and the project record. Write each audit to
-`design/audit/<date>-design.md` and `design/audit/<date>-a11y.md`, and record accepted deviations
-in the project record.
+dev server. Write each record under `design/audit/` and record accepted deviations in the project
+record.
 
-**Design audit**
+**Design check.** For each section, tabulate the design's geometry (from the snapshot) against the
+measured build at a scrollbar-free design width (often 1440px), and fix deltas over ~2px, largest
+elements first. Use the same process for later designer feedback. Then run layout checks across
+the viewport test matrix (1920, 1536, 1440 with and without a scrollbar, 1366, 1280, 1024, 375).
+The design width is the fidelity reference, not a proxy for traffic. Render an HTML export before
+trusting it, and don't copy its defects (invisible controls, failing contrast) into the build.
 
-- **Geometry at the design width.** For each section, tabulate the design's geometry (from the
-  snapshot) against the measured build at a scrollbar-free design width (often 1440px). Fix
-  deltas over ~2px, largest elements first. Compare typography too: family, size, line height,
-  weight and letter spacing at each breakpoint. Use the same table for later designer feedback.
-- **Viewport matrix.** Then check layout at 1920, 1536, 1440 (with and without a scrollbar), 1366,
-  1280, 1024, 768 and 375: overflow, wrapping, line breaks, image crops (thin strips where box
-  height stays fixed while width grows), sticky elements and container-query switches. The
-  design width is the fidelity reference, not a proxy for traffic.
-- **Reference defects.** Render an HTML export before trusting it. Where the reference itself has
-  defects (invisible controls, failing contrast), don't copy them: fix in the build and record
-  the decision. An HTML reference can be audited live, side by side with the build.
-- **Record:** the measured table, fixes made, accepted deviations with reasons, and what was not
-  checked.
-
-**Accessibility audit** (WCAG 2.2 AA)
-
-- **Keyboard:** logical tab order, visible focus on every control, working skip link, no traps,
-  Escape closes overlays, focus returns to the trigger, and composite widgets follow their
-  keyboard pattern.
-- **Rendered contrast:** text and UI against their actual backgrounds, including text over
-  images, hover/focus/disabled states and both colour modes where switching exists.
-- **Semantics:** landmarks, one `h1` and ordered headings, accessible names for controls and
-  links, meaningful or empty alt text, labelled form fields with errors announced, and live
-  regions only where state changes need announcing.
-- **Adaptation:** reflow at 320 CSS px and 400% zoom, text-spacing overrides, reduced motion,
-  target size (WCAG 2.2 AA minimum 24×24px; the baseline's 44px is a convention) and a usable
-  no-JavaScript path.
-- **Assistive technology:** a screen-reader smoke test (VoiceOver or NVDA) on key journeys where
-  available; otherwise state that it was not tested.
-- **Record:** each finding with its WCAG criterion, severity, location, fix and status. Automated
-  checks passing is not a conformance claim; state the scope covered.
-
+**Accessibility audit.** If the `accessibility-audit` skill is installed, run its
+[workflow](../../accessibility-audit/SKILL.md) with its Astro adaptation: rendered evidence,
+severities, scoring, an audit record and re-verification after fixes. Without it, check at
+least: keyboard order, visible focus, skip link, no traps and focus return; rendered contrast,
+including text over images and both colour modes; landmarks, headings, accessible names, alt
+text, labelled fields and announced errors; reflow at 320 CSS px, target size and reduced
+motion; and a usable no-JavaScript path. State what was not tested (for example screen readers).
+Passing automated checks is not a conformance claim.

@@ -60,7 +60,7 @@ Frame-scaling the whole section (above) is right when the text can scale with it
 
 ## Photo Crops on Wide Screens
 
-A single 1440 frame says nothing about 1920 or a 27" monitor at 2560. If photo boxes keep their design **height** while their **width** follows the viewport, `object-fit: cover` shows a progressively thinner strip: heads cut off, products cropped, less of every image. Numbers from the product site (visible share of image height, 1440 → 2560): team portrait 98% → 55%, action shot 56% → 32%, image band 41% → 23%, product photos 89% → 50%. Measure the visible share of each image's source (the rendered box against the source's aspect ratio after `object-fit: cover`) at each width in the [viewport matrix](verification.md#final-design-and-accessibility-audit).
+A single 1440 frame says nothing about 1920 or a 27" monitor at 2560. If photo boxes keep their design **height** while their **width** follows the viewport, `object-fit: cover` shows a progressively thinner strip: heads cut off, products cropped, less of every image. Numbers from the product site (visible share of image height, 1440 → 2560): team portrait 98% → 55%, action shot 56% → 32%, image band 41% → 23%, product photos 89% → 50%. Check images at each width in the [viewport matrix](verification.md#final-design-and-accessibility-audit).
 
 **This is a design decision; ask before choosing.** The options, with their costs:
 

@@ -1,3 +1,5 @@
+/* Two-tier fluid scales (viewport vw / container cqi): the split is adapted from GenCSS,
+   https://gencss.co.uk/ */
 :root {
   /* ════════════════════════════════════════════════════════════════════════════
      1. COLOR PRIMITIVES (Native OKLCH — Raw Palette from Design Source)

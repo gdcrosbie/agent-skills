@@ -8,6 +8,9 @@ The token contract defines two distinct fluid tiers:
 1. **Tier 1: Canvas / Viewport Scales (`vw`)**: For page sections, site layout, global headings, and base document text.
 2. **Tier 2: Component / Container Scales (`cqi`)**: For cards, teasers, badges, widgets, and items inside multi-column grids or sidebars.
 
+The split between viewport-based and container-based fluid scales is adapted from
+[GenCSS](https://gencss.co.uk/). The values and token names are this baseline's own.
+
 ```css
 :root {
   /* ════════════════════════════════════════════════════════════════════════════

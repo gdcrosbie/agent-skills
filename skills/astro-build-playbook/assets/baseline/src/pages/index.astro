@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <main id="main-content">
+    <section class="l-section" aria-labelledby="page-title">
+      <div class="l-container">
+        <h1 id="page-title" class="c-baseline-title">Site name</h1>
+        <p class="c-baseline-lead">Replace this page with the approved design.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .c-baseline-title {
+    font-family: var(--font-display);
+    font-size: var(--h1);
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin-block-end: var(--space-m);
+  }
+
+  .c-baseline-lead {
+    font-size: var(--text-l);
+    color: var(--color-muted);
+    max-inline-size: 45ch;
+  }
+</style>

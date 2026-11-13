@@ -1,0 +1,124 @@
+:root {
+  /* ════════════════════════════════════════════════════════════════════════════
+     1. COLOR PRIMITIVES (Native OKLCH — Raw Palette from Design Source)
+     ════════════════════════════════════════════════════════════════════════════ */
+  --c-primary: oklch(0.450 0.028 152.8); /* Forest Slate (#4a5a4e) */
+  --c-accent: oklch(0.693 0.089 81.8);   /* Warm Ochre (#b8975a) */
+  --c-surface: oklch(0.957 0.012 79.8);  /* Clean Parchment (#f5f0e8) */
+  --c-text: oklch(0.284 0.007 106.8);    /* Deep Charcoal (#2a2a26) */
+  --c-success: oklch(0.35 0.12 145);
+  --c-success-surface: oklch(0.95 0.04 145);
+  --c-success-border: oklch(0.60 0.12 145);
+  --c-error: oklch(0.35 0.18 25);
+  --c-error-surface: oklch(0.96 0.04 25);
+  --c-error-border: oklch(0.60 0.14 25);
+
+  /* Derived Tones (Generated via oklch relative syntax) */
+  --c-surface-dim: oklch(from var(--c-surface) 0.96 c h);
+  --c-surface-tint: oklch(from var(--c-primary) 0.93 c h);
+  --c-text-muted: oklch(from var(--c-text) 0.45 c h);
+  --c-text-dim: oklch(from var(--c-text) 0.52 c h);
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     2. SEMANTIC ROLES (What Components & Layouts Consume)
+     ════════════════════════════════════════════════════════════════════════════ */
+  --color-bg: var(--c-surface);
+  --color-surface: var(--c-surface);
+  --color-surface-tint: var(--c-surface-tint);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-text-muted);
+  --color-dim: var(--c-text-dim);
+  --color-primary: var(--c-primary);
+  --color-accent: var(--c-accent);
+  --color-success: var(--c-success);
+  --color-success-surface: var(--c-success-surface);
+  --color-success-border: var(--c-success-border);
+  --color-error: var(--c-error);
+  --color-error-surface: var(--c-error-surface);
+  --color-error-border: var(--c-error-border);
+  --color-border: color-mix(in srgb, var(--color-text) 18%, transparent);
+
+  --border-subtle: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+  --border-strong: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+
+  --shadow-subtle: 0 2px 8px -2px color-mix(in srgb, var(--color-text) 8%, transparent);
+  --shadow-card: 0 8px 24px -4px color-mix(in srgb, var(--color-text) 12%, transparent);
+  --shadow-elevated: 0 16px 40px -8px color-mix(in srgb, var(--color-text) 18%, transparent);
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     3. FLUID TYPOGRAPHY SCALE
+     ════════════════════════════════════════════════════════════════════════════ */
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'DM Sans Variable', system-ui, -apple-system, sans-serif;
+
+  --tracking-caps: 0.08em;
+  --tracking-display: -0.02em;
+
+  /* ── Tier 1: Canvas / Viewport Scales (vw) ──────────────────────────────────
+     Use for: Page sections, site layout, global headings, base document text */
+  --text-2xs: clamp(0.55rem, 0.52rem + 0.1vw, 0.625rem);
+  --text-xs: clamp(0.65rem, 0.62rem + 0.15vw, 0.75rem);
+  --text-s: clamp(0.75rem, 0.72rem + 0.2vw, 0.875rem);
+  --text-base: clamp(0.875rem, 0.83rem + 0.25vw, 1rem);
+  --text-m: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
+  --text-l: clamp(1.125rem, 1.05rem + 0.5vw, 1.35rem);
+  --text-xl: clamp(1.35rem, 1.25rem + 0.75vw, 1.75rem);
+
+  /* Page Headings (Canvas context) */
+  --h4: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --h3: clamp(1.5rem, 1.35rem + 0.8vw, 2rem);
+  --h2: clamp(1.85rem, 1.6rem + 1.3vw, 2.75rem);
+  --h1: clamp(2.5rem, 2rem + 2.5vw, 4.75rem);
+
+  /* Convenience aliases for heading scales */
+  --text-2xl: var(--h3);
+  --text-3xl: var(--h2);
+  --text-4xl: var(--h1);
+
+  /* ── Tier 2: Component / Container Scales (cqi) ─────────────────────────────
+     Use for: Cards, badges, teasers, widgets inside multi-column grids/drawers */
+  --cq-text-xs: clamp(0.65rem, 0.55rem + 0.5cqi, 0.75rem);
+  --cq-text-s: clamp(0.75rem, 0.65rem + 0.75cqi, 0.875rem);
+  --cq-text-m: clamp(0.9rem, 0.8rem + 1cqi, 1.125rem);
+  --cq-text-l: clamp(1.1rem, 0.95rem + 1.5cqi, 1.35rem);
+  --cq-h3: clamp(1.25rem, 1rem + 2cqi, 1.75rem);
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     4. FLUID SPACING SCALE (Flow-Relative CSS Logical Properties)
+     ════════════════════════════════════════════════════════════════════════════ */
+  /* ── Tier 1: Canvas / Viewport Spacing (vw) ───────────────────────────────── */
+  --space-3xs: clamp(0.25rem, 0.22rem + 0.1vw, 0.35rem);
+  --space-2xs: clamp(0.375rem, 0.32rem + 0.15vw, 0.5rem);
+  --space-xs: clamp(0.5rem, 0.45rem + 0.2vw, 0.75rem);
+  --space-s: clamp(0.75rem, 0.7rem + 0.3vw, 1rem);
+  --space-m: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+  --space-l: clamp(1.5rem, 1.3rem + 0.9vw, 2.25rem);
+  --space-xl: clamp(2rem, 1.7rem + 1.4vw, 3.25rem);
+  --space-2xl: clamp(3rem, 2.5rem + 2.2vw, 4.75rem);
+  --space-3xl: clamp(4rem, 3.2rem + 3.5vw, 6.5rem);
+
+  /* ── Tier 2: Component / Container Spacing (cqi) ──────────────────────────── */
+  --cq-card-padding: clamp(1rem, 0.6rem + 2.5cqi, 2rem);
+  --cq-gap: clamp(0.5rem, 0.3rem + 1.5cqi, 1.25rem);
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     5. LAYOUT & CONTAINERS
+     ════════════════════════════════════════════════════════════════════════════ */
+  --gutter: clamp(1rem, 0.8rem + 1vw, 2.5rem);
+  --container-max: 1320px;
+  --container-narrow: 840px;
+
+  /* ════════════════════════════════════════════════════════════════════════════
+     6. INTERACTION, RADIUS & ELEVATION
+     ════════════════════════════════════════════════════════════════════════════ */
+  --radius-xs: 2px;
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 16px;
+  --radius-full: 9999px;
+  --radius-pill: var(--radius-full);
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}

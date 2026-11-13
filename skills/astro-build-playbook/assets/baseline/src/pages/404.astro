@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404: Page not found"
+  description="The page you were looking for could not be found."
+  noindex={true}
+>
+  <main id="main-content" class="l-section c-error-page">
+    <div class="l-container c-error-page__container">
+      <span class="c-error-page__badge">404 Error</span>
+      <h1 class="c-error-page__title">Page not found</h1>
+      <p class="c-error-page__lead">
+        Sorry, the page you are looking for doesn't exist or has been moved.
+      </p>
+      <a href="/" class="c-error-page__link">← Return home</a>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .c-error-page {
+    min-block-size: 70vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .c-error-page__container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .c-error-page__badge {
+    display: inline-block;
+    font-size: var(--text-xs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-block-end: var(--space-s);
+  }
+
+  .c-error-page__title {
+    font-family: var(--font-display);
+    font-size: var(--h1);
+    line-height: 1.1;
+    color: var(--color-primary);
+    margin-block-end: var(--space-m);
+  }
+
+  .c-error-page__lead {
+    font-size: var(--text-l);
+    color: var(--color-muted);
+    line-height: 1.6;
+    max-inline-size: 50ch;
+    margin-block-end: var(--space-xl);
+  }
+
+  .c-error-page__link {
+    display: inline-flex;
+    align-items: center;
+    padding-block: var(--space-s);
+    padding-inline: var(--space-l);
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    border-radius: var(--radius-m);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .c-error-page__link:hover {
+    opacity: 0.9;
+  }
+
+  .c-error-page__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+</style>

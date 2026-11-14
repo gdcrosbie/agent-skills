@@ -99,6 +99,14 @@ const socialImageURL = new URL(ogImage.src, Astro.site);
 - **Never pass `ImageMetadata.src` raw to `<meta property="og:image">`**: Astro only emits processed derivatives requested by `<Picture>`, `<Image>`, or `getImage()` into `dist/_astro/`; a raw `poster.src` string will 404 in production unless `getImage()` is called.
 - **Format**: JPG (broadest compatibility across social and messaging scrapers).
 - **Absolute URL**: Never use relative paths (`/images/og.jpg`); social scrapers require absolute URLs with the protocol and domain (`https://example.com/images/og.jpg`).
+- **A screenshot card goes stale with the page.** When `og-default.jpg` is a capture of the hero, any change to the hero's words or the header (a number in a heading, a new nav item) leaves the old text baked into the image, and `test:social-image` only checks its size. When the hero or header changes, look at the image, and update its alt text in the same change. Recapture from the built site (`astro preview`), not the dev server, for example with Chrome on macOS:
+  ```bash
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+    --force-prefers-reduced-motion --window-size=1200,630 --virtual-time-budget=6000 \
+    --user-data-dir="$(mktemp -d)" --screenshot=og.png http://127.0.0.1:4321/
+  sips -s format jpeg -s formatOptions 60 og.png --out public/images/og-default.jpg
+  ```
+  `--force-prefers-reduced-motion` makes entrance animations show their finished state when the site's reduced-motion styles do; look at the result before saving it (the `astro-design-audit` skill's [headless capture pitfalls](../../astro-design-audit/SKILL.md#regression-gate-for-refactors), if installed). Sites that cache link previews keep the old card until they refetch the page. On one build a quality-60 JPEG came to 84 KB.
 
 ---
 

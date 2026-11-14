@@ -194,6 +194,11 @@ missed.
 - **Lazy images below the fold may not have loaded**, so photos appear as empty panels. Confirm
   in a real browser (`img.complete && img.naturalWidth > 0` after forcing `loading="eager"`)
   before calling it a regression.
+- **Animations may not finish under virtual time.** `--virtual-time-budget` let a hero's first
+  entrance animation run, but a staggered card stopped after its first row even at 15 s. Capture
+  with `--force-prefers-reduced-motion` when the site's reduced-motion styles show the finished
+  state, and look at the capture before using it. Capture both sides of a regression diff with
+  the same flag.
 - **`--hide-scrollbars` doesn't remove a reserved gutter.** With
   `html { scrollbar-gutter: stable }` (a common reset default) a 1440 window still lays out at
   1425, even with overlay scrollbars on macOS. Use a 1455 window for a 1440 layout, and always

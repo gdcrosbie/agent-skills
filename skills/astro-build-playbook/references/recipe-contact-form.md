@@ -164,14 +164,18 @@ import { CONTACT_FIELD_LIMITS } from '../lib/contact-validation';
 interface Props {
   action?: string;
   turnstileSiteKey: string;
-  contactEmail: string; // Approved alternative for visitors without JavaScript
+  /** Approved alternative for visitors without JavaScript: an email address, or a link (another
+      contact page) when the site has no public address. Supply one. */
+  contactEmail?: string;
+  contactLink?: { href: string; label: string };
 }
 
-const { action = '/api/contact', turnstileSiteKey, contactEmail } = Astro.props;
+const { action = '/api/contact', turnstileSiteKey, contactEmail, contactLink } = Astro.props;
+const alternative = contactLink ?? { href: `mailto:${contactEmail}`, label: 'Email us instead' };
 ---
 
 <form class="c-contact-form" method="POST" action={action}>
-  <noscript>This form requires JavaScript for security verification. <a href={`mailto:${contactEmail}`}>Email us instead</a>.</noscript>
+  <noscript>This form requires JavaScript for security verification. <a href={alternative.href}>{alternative.label}</a>.</noscript>
   <!-- Anti-spam: Honeypot & Timestamp -->
   <div class="c-contact-form__honey" aria-hidden="true">
     <label for="contact-form-hp">Do not fill this out if human</label>
@@ -904,7 +908,7 @@ test('built form exposes labels, requirements, descriptions, and status semantic
     assert.ok(document.getElementById(descriptionId), `Expected ${descriptionId} error container`);
   }
 
-  assert.ok(form.querySelector('noscript a[href^="mailto:"]'), 'Expected a contact alternative without JavaScript');
+  assert.ok(form.querySelector('noscript a[href]'), 'Expected a contact alternative without JavaScript');
   assert.equal(form.elements.namedItem('email').getAttribute('type'), 'email');
   const status = form.querySelector('[role="status"]');
   assert.ok(status);
@@ -986,6 +990,18 @@ test('bounded parsing and invalid verification metadata cannot dispatch email', 
   } finally { globalThis.fetch = originalFetch; }
 });
 
+// When the form also opens in a dialog (for example the astro-ui-patterns accessible modal), every
+// trigger must be a real link to the contact page, so visitors without JavaScript still reach the
+// form. Adjust the page and dialog ID to the project's.
+test('dialog triggers are real links to the contact page', () => {
+  const document = builtDocument('index.html');
+  const dialog = document.querySelector('dialog[data-modal]');
+  if (!dialog) return; // no dialog form on this page
+  const triggers = [...document.querySelectorAll(`[data-modal-trigger="${dialog.id}"]`)];
+  assert.ok(triggers.length > 0, 'Expected at least one trigger');
+  for (const trigger of triggers) assert.equal(trigger.getAttribute('href'), '/contact/');
+});
+
 test('Worker routes contact requests and delegates static assets', async () => {
   const env = { ASSETS: { fetch: async () => new Response('asset') } };
   assert.equal((await worker.fetch(new Request('https://example.com/api/contact'), env)).status, 405);
@@ -1013,7 +1029,7 @@ Configure runtime secrets and variables on the selected Worker (or the productio
 | `MAILGUN_REGION` | No | Set to `eu` for the EU API; otherwise the US API is used. |
 | `TURNSTILE_SECRET_KEY` | Yes for this recipe | Server-side challenge verification secret. |
 
-Pass the matching public site key to `<ContactForm turnstileSiteKey="0x4AAAAAA..." contactEmail="<approved-contact-address>" />`. The site key may be present in browser-rendered markup; the secret key must never be.
+Pass the matching public site key to `<ContactForm turnstileSiteKey="0x4AAAAAA..." contactEmail="<approved-contact-address>" />`, or `contactLink={{ href: 'https://…/contact/', label: 'use the contact form on …' }}` when the site has no public address. The site key may be present in browser-rendered markup; the secret key must never be.
 
 ## Behaviour
 

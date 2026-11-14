@@ -182,6 +182,12 @@ Use runtime Secrets for the email provider's API key and `TURNSTILE_SECRET_KEY`;
 allows a modal to load its site key without rebuilding HTML. Load/render its explicit
 widget when opened, retaining its ID and resetting on retry.
 
+**The site's own domain needs no mail setup.** A form can send from an existing verified sending
+domain, so a new site's domain needs no mailboxes or MX records. Give each site its own sending
+credential where the provider allows it, so one can be revoked alone; name the site in the sender
+and subject (e.g. `example.com <forms@mail.example.org>`, `example.com: message from <name>`), and
+reply to the visitor through `Reply-To`.
+
 Use the narrowest sending credential the provider offers (with Mailgun, a **Domain Sending
 Key** restricted to the chosen domain). Confirm the verified sending domain and any region
 independently of the recipient's address; never infer either from that address. Keep sender and recipient server-controlled,

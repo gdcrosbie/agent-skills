@@ -147,6 +147,19 @@ Set the following variables in the **Cloudflare Dashboard** under:
 
 Email and Turnstile server verification need runtime configuration. Build-environment variables alone do not provide the function/Worker's email-provider key or `env.TURNSTILE_SECRET_KEY` bindings. For Cloudflare Workers, configure those as runtime **Secrets** on the Worker (for example with `wrangler secret put`); put non-sensitive domain/region/destination settings in its runtime variables. For Pages Functions, use that project's runtime bindings and the intended production/preview environment. Never commit secret values into Wrangler configuration or browser code. Verify the selected host's runtime bindings rather than assuming its build settings supply them.
 
+**A saved secret is not yet a deployed one (Cloudflare Workers).** Adding a secret in the
+dashboard (**Settings → Variables and Secrets**) can create an *uploaded* version without
+deploying it: `wrangler secret list` shows the name, but traffic stays on the previous version and
+the handler reads the secret as empty. Before testing, confirm the version taking traffic carries
+the secrets: `wrangler deployments list` for its ID, then `wrangler versions view <id>` for its
+`Secret Name` lines. To deploy it, use the Worker's one deploy path (a CI `wrangler deploy`
+inherits the Worker's existing secrets) rather than adding a manual `wrangler versions deploy`.
+Then probe the live endpoint with a same-origin POST, valid fields, a timestamp a few seconds old
+and a dummy `cf-turnstile-response`: the recipe returns "Security verification unavailable" while
+the secret is missing, and "Turnstile verification failed" once it is read (Siteverify rejects
+the token and no email is sent). The email provider is only proven by a real send through a
+passed widget, which a person completes.
+
 ---
 
 ## 8. Demo / Staging Form Disclaimer (`role="note"`)

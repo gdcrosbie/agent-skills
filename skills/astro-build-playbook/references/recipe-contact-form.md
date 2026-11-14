@@ -1051,6 +1051,7 @@ A provider's success response means it accepted the message, not that it reached
 
 1. Configure the email provider's credentials, verified sending domain (and region, if any), and destination for preview and production environments on the selected Worker or existing Pages deployment.
 2. Configure the required Turnstile widget and secret, allowed hostname and contact action. Use a sending key restricted to the chosen domain where the provider supports one.
+   Then confirm the deployed version carries the secrets, not just the Worker's secret list ([runtime bindings](forms-and-submissions.md#runtime-bindings-versus-build-variables)).
 3. Customise the fields, consent copy, success page, error page, sender identity, and operational alerts.
 4. Test valid, invalid, provider-failure, native HTML response, JavaScript-disabled contact alternative, keyboard, and abuse-protection paths in the deployed environment.
 5. Run `npm run test:forms` to exercise the local contract with a mocked provider. Astro's static preview does not reproduce host-native function routing, so it is not a substitute for a deployed integration test.

@@ -115,6 +115,18 @@ const { id, title, class: className = '' } = Astro.props;
 </style>
 
 <script>
+  // Return focus to the trigger; if it is hidden by now (a link in a mobile drawer or menu that
+  // closed when the dialog opened), to the visible control that opens its container instead.
+  function returnFocus(trigger: HTMLElement | null) {
+    if (!trigger?.isConnected) return;
+    if (trigger.checkVisibility()) { trigger.focus(); return; }
+    for (let el = trigger.parentElement; el; el = el.parentElement) {
+      if (!el.id) continue;
+      const opener = document.querySelector<HTMLElement>(`[aria-controls~="${CSS.escape(el.id)}"]`);
+      if (opener?.checkVisibility()) { opener.focus(); return; }
+    }
+  }
+
   function initModals() {
     document.querySelectorAll<HTMLDialogElement>('dialog[data-modal]').forEach((modal) => {
       if (modal.dataset.modalInitialized) return;
@@ -131,7 +143,7 @@ const { id, title, class: className = '' } = Astro.props;
       });
       modal.addEventListener('close', () => {
         document.body.style.overflow = previousOverflow;
-        if (triggerElement?.isConnected) triggerElement.focus();
+        returnFocus(triggerElement);
       });
 
       document.querySelectorAll<HTMLElement>('[data-modal-trigger]').forEach((trigger) => {
@@ -172,6 +184,13 @@ values when closing/reopening or after failed submissions. Test close, Escape an
 backdrop dismissal, restored trigger focus, repeated initialisation, and long/mobile
 content without clipped fields or horizontal overflow. Native `showModal()` provides
 background inertness and focus containment; do not replace it with a styled `div`.
+
+When a trigger also sits in a [mobile navigation drawer](mobile-nav-drawer.md), test that
+path on its own: the drawer closes on the link click, so the trigger is hidden when the dialog
+closes and `returnFocus` falls back to the drawer toggle (found through its `aria-controls`).
+The drawer's own "restore focus to the toggle" call during the click is a no-op, because the
+page outside the open dialog is inert. Verified 2026-11-14: open the dialog from the drawer at
+390px, press Escape, and focus lands on the menu toggle.
 
 
 - If using `AccessibleModal`, wire up open triggers with `data-modal-trigger="modal-id"`.

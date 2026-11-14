@@ -143,6 +143,38 @@ A working Wrangler deployment credential does not establish access to the Worker
 
 Temporary registration permission is only needed for a path that requires it. When an existing authorised credential can register the deployment token securely, use that credential and create the deployment token with its final permissions. Keep the token's secret out of command arguments and tool output as well as logs, screenshots and Git.
 
+#### Custom Domains in `wrangler.jsonc`
+
+Keep a Custom Domain in the repository, not only in the dashboard, so the deploy path creates it:
+
+```jsonc
+"routes": [{ "pattern": "app.example.com", "custom_domain": true }]
+```
+
+The deploy creates the proxied DNS record and certificate; there must be no existing CNAME on that
+hostname. Wrangler then lists `app.example.com (custom domain)` under its deployed triggers.
+**Verified on one build, 2026-11-13, Wrangler 4.146.0, GitHub Actions:** a token with only
+**Workers Scripts: Edit** created the domain on a zone in the same account. To retire the
+`workers.dev` URL, set `"workers_dev": false` in a *later* deploy, once the custom domain is
+verified, so a failed domain attach never leaves the Worker without a route. Update `site` in
+`astro.config.mjs` to the custom domain in the same change that adds the route. Access control is
+per hostname: decide whether the new hostname is protected before the deploy that creates it (§4).
+
+Verifying the new hostname and retiring the old URLs (2026-11-14, Wrangler 4.146.0):
+- **DNS:** a lookup made before the deploy can leave the local resolver negatively caching the
+  new name for minutes. Check the record at the zone's Cloudflare nameservers (or
+  `dig +short <host> @1.1.1.1`) and fetch with `curl --resolve <host>:443:<ip>` instead of
+  waiting on the local cache.
+- **workers.dev and version URLs:** set `"preview_urls": false` in the same later deploy as
+  `"workers_dev": false` when the custom domain should be the only public URL (see *Preview
+  builds and version URLs* above). Afterwards the workers.dev URL returns 404
+  `error code: 1042`, and Wrangler lists only `<host> (custom domain)` as a trigger.
+- **HTTPS redirect:** Always Use HTTPS is a zone setting under **SSL/TLS → Edge Certificates**,
+  not on the SSL/TLS **Overview** page (which holds the encryption mode). Verify with
+  `curl -sI http://<host>/path?q=1`: a 301 to the same https URL with path and query kept, on
+  every hostname in the zone. The encryption mode (Flexible/Full/Strict) does not affect a
+  Worker on a custom domain, which has no separate origin.
+
 #### Reproducible Git builds
 
 Pin a supported Node version tested with the project's locked dependencies. On Workers Builds, commit `.node-version` or configure `NODE_VERSION`, then verify the detected version in the build log. The puzzle-generator app used Node 22.23.2; this is a tested project version, not a default for every Astro project.
@@ -328,6 +360,13 @@ configuration mistakes surface before anything is public. It does not replace th
 Test the **production alias and custom domain**, not only the per-deployment URL. Protected preview URLs return an SSO 302 and hide the site's real headers.
 
 On Cloudflare Workers, the first requests in the seconds after a deploy can return Cloudflare's own placeholder 404 (with `x-frame-options: SAMEORIGIN` and `cache-control: private, no-store`, not your `_headers` set). Wait about 10 seconds and check again before debugging. Also confirm the **live commit**, not only the headers: see *One deploy path per Worker* in §2.
+
+A 200 on `/robots.txt` does not prove a deploy landed. Cloudflare's managed robots.txt for the
+zone can answer it, prepending a Content Signals comment block (comments only, no rules) to the
+site's file, or serving the block alone where the site has none. It was seen on one zone and
+gone from the same hosts later that day (2026-11-14), so don't rely on either state. Use a change
+unique to the new build (a sitemap or canonical URL, a new page) as the landing signal, and read
+`robots.txt` for its rules rather than its status.
 
 ---
 

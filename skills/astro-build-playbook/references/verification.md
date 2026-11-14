@@ -91,7 +91,10 @@ Run on `astro preview` or the deployed URL under production headers, not on sour
 dev server. Write each record under `design/audit/` and record accepted deviations in the project
 record.
 
-**Design check.** For each section, tabulate the design's geometry (from the snapshot) against the
+**Design audit.** If the `astro-design-audit` skill is installed, run its
+[workflow](../../astro-design-audit/SKILL.md): measured geometry and typography against the
+design evidence, the viewport matrix, drawn states, reference defects, a refactor regression gate
+and an audit record. Without it, at least run this design check. For each section, tabulate the design's geometry (from the snapshot) against the
 measured build at a scrollbar-free design width (often 1440px), and fix deltas over ~2px, largest
 elements first. Use the same process for later designer feedback. Then run layout checks across
 the viewport test matrix (1920, 1536, 1440 with and without a scrollbar, 1366, 1280, 1024, 375).

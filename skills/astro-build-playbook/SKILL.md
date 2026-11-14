@@ -88,8 +88,9 @@ as passes. EmDash needs live route/editorial/database performance checks instead
 assertions. Inspect real interactions on built output and the deployed origin with its actual
 CSP.
 
-Completed design builds finish with the design check in
-[verification](references/verification.md#final-design-and-accessibility-audit) and the
+Completed design builds finish with the `astro-design-audit` skill
+([workflow](../astro-design-audit/SKILL.md), if installed; otherwise the design check in
+[verification](references/verification.md#final-design-and-accessibility-audit)) and the
 `accessibility-audit` skill ([workflow](../accessibility-audit/SKILL.md), if installed). Keep audit
 records in `design/audit/` and accepted decisions in the project record. Targeted fixes recheck
 affected states and regressions within scope. Source files and a passing build are not proof of

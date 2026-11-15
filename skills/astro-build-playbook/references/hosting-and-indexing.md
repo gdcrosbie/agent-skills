@@ -324,6 +324,17 @@ jobs:
     },
   });
   ```
+- **Renamed routes on Workers Static Assets:** when a route folder moves, 301 the old paths
+  in `public/_redirects`. A `/services/` → `/treatments/` move used:
+  ```text
+  /services /treatments/ 301
+  /services/ /treatments/ 301
+  /services/* /treatments/:splat 301
+  ```
+  Static Assets applies `_redirects` only to requests that reach the assets layer, so the
+  old paths must not match a `run_worker_first` pattern. Live, each returned a single 301
+  to the `/treatments/` URL with the query string kept, and `/_redirects` itself returned
+  404. Add the old URLs, and `/_redirects` as a 404, to the live check (§3).
 - **Trailing-slash duplicate key collision:** Never declare both `/route` and `/route/` keys in `astro.config.mjs`. Astro normalizes trailing slashes automatically; defining both causes route collision build errors (`The route "/..." is defined in both "/..." and "/.../". A static route cannot be defined more than once.`). Always define only the canonical key matching your site's `trailingSlash` convention.
 
 ### Forms by host
@@ -360,6 +371,15 @@ configuration mistakes surface before anything is public. It does not replace th
 Test the **production alias and custom domain**, not only the per-deployment URL. Protected preview URLs return an SSO 302 and hide the site's real headers.
 
 On Cloudflare Workers, the first requests in the seconds after a deploy can return Cloudflare's own placeholder 404 (with `x-frame-options: SAMEORIGIN` and `cache-control: private, no-store`, not your `_headers` set). Wait about 10 seconds and check again before debugging. Also confirm the **live commit**, not only the headers: see *One deploy path per Worker* in §2.
+
+**A 403 you can't reproduce.** Chromium's "Access to <host> was denied … HTTP ERROR 403"
+page means a 403 with an empty body; it doesn't say who sent it. On one build a visitor's
+browser showed it shortly after a deploy while curl over IPv4 and IPv6 and another browser
+got 200 from the same machine; it cleared on its own within minutes and the cause wasn't
+found. If it persists, get the response headers from the affected browser (DevTools →
+Network): a `cf-ray` header means Cloudflare served the 403, and its Ray ID finds the
+matching event in the zone's security events. No `cf-ray` points to something between the
+browser and Cloudflare (an extension, VPN or proxy).
 
 A 200 on `/robots.txt` does not prove a deploy landed. Cloudflare's managed robots.txt for the
 zone can answer it, prepending a Content Signals comment block (comments only, no rules) to the

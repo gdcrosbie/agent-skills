@@ -175,6 +175,25 @@ Website labels are separate: CMS configuration does not automatically change pub
 filters, navigation, headings or table captions. Inspect those independently and
 update them only within the requested scope.
 
+A label-only rename leaves the site half-renamed: on one build the nav and page titles said
+"Treatments" while the URLs (`/services/…`) and the settings copy still said "service".
+When the user asks for the public term to change, settle the scope as **copy**, **URLs**
+or both, then:
+
+- **Copy:** the settings/global strings (intros, back links, table columns and captions,
+  empty states, meta descriptions) plus literal text in components. Grep the components
+  and the built HTML for the old word; the built output is the check, since copy spans
+  JSON, components and route files.
+- **URLs:** `git mv` the route folder, update every hardcoded `href`, and 301 the old paths
+  with the host's redirect file (`hosting-and-indexing.md` §2, *Renamed routes*). Search
+  the other sites and docs that link in.
+- **Tests:** update built-path assertions. Some derive `dist/` paths from a route name
+  (`dist/${route}/index.html`), so a grep for the literal path misses them; run the full
+  gate after the move.
+- **Leave internal names alone** (collection and field names, settings keys, asset
+  folders, form field names) unless a migration is requested; record that they still
+  use the old term.
+
 ---
 
 ### 2.3 Bridging `astro:assets` (`<Image />`) with CMS Image Pickers
